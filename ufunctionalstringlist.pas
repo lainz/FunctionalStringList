@@ -8,60 +8,57 @@ uses
   Classes, SysUtils;
 
 type
-  TFunctionalStringList = class;
-
-  TFunctionalStringListFilterMethod = function(const s: string): boolean of object;
-  TFunctionalStringListReduceMethod = function(const s1: string;
+  TStringListFilterMethod = function(const s: string): boolean of object;
+  TStringListReduceMethod = function(const s1: string;
     const s2: string): string of object;
-  TFunctionalStringListMapMethod = function(const s: string): string of object;
-  TFunctionalStringListForEachMethod = procedure(const currentValue: string;
-    const index: integer; const arr: TFunctionalStringList) of object;
-  TFunctionalStringListSomeMethod = function(const currentValue: string;
-    const index: integer; const arr: TFunctionalStringList): boolean of object;
+  TStringListMapMethod = function(const s: string): string of object;
+  TStringListForEachMethod = procedure(const currentValue: string;
+    const index: integer; const arr: TStringList) of object;
+  TStringListSomeMethod = function(const currentValue: string;
+    const index: integer; const arr: TStringList): boolean of object;
 
-  { TFunctionalStringList }
+  { TStringList }
 
-  TFunctionalStringList = class(TStringList)
+  TFunctionalStringList = class helper for TStringList
   public
-    function Filter(fun: TFunctionalStringListFilterMethod): TFunctionalStringList;
-    function Reduce(fun: TFunctionalStringListReduceMethod;
+    function Filter(fun: TStringListFilterMethod): TStringList;
+    function Reduce(fun: TStringListReduceMethod;
       startingValue: string = ''): string;
-    function Map(fun: TFunctionalStringListMapMethod): TFunctionalStringList;
-    procedure ForEach(fun: TFunctionalStringListForeachMethod);
+    function Map(fun: TStringListMapMethod): TStringList;
+    procedure ForEach(fun: TStringListForeachMethod);
     function Pop: string;
     function Push(s: string): integer;
     function Shift: string;
     function Unshift(s: string): integer;
-    function Reverse: TFunctionalStringList;
-    function ToString: string; override;
+    function Reverse: TStringList;
     function Join(separator: string): string;
-    function Concat(other: TFunctionalStringList): TFunctionalStringList;
-    function Slice(fromIndex: integer): TFunctionalStringList;
-    function Slice(fromIndex, toIndex: integer): TFunctionalStringList;
+    function Concat(other: TStringList): TStringList;
+    function Slice(fromIndex: integer): TStringList;
+    function Slice(fromIndex, toIndex: integer): TStringList;
     function Fill(Value: string; start: integer = 0;
-      _end: integer = -1): TFunctionalStringList;
-    function Some(fun: TFunctionalStringListSomeMethod): boolean;
+      _end: integer = -1): TStringList;
+    function Some(fun: TStringListSomeMethod): boolean;
     function IndexOf(s: string; start: integer = 0): integer;
     function LastIndexOf(s: string; start: integer = -1): integer;
   end;
 
-operator := (fsl: TFunctionalStringList): string;
+operator := (fsl: TStringList): string;
 
 implementation
 
-operator := (fsl: TFunctionalStringList): string;
+operator := (fsl: TStringList): string;
 begin
-  Result := fsl.ToString;
+  Result := fsl.CommaText;
 end;
 
-{ TFunctionalStringList }
+{ TStringList }
 
-function TFunctionalStringList.Filter(fun: TFunctionalStringListFilterMethod):
-TFunctionalStringList;
+function TFunctionalStringList.Filter(fun: TStringListFilterMethod):
+TStringList;
 var
   i: integer;
 begin
-  Result := TFunctionalStringList.Create;
+  Result := TStringList.Create;
   for i := 0 to Self.Count - 1 do
   begin
     if fun(Self[i]) then
@@ -69,7 +66,7 @@ begin
   end;
 end;
 
-function TFunctionalStringList.Reduce(fun: TFunctionalStringListReduceMethod;
+function TFunctionalStringList.Reduce(fun: TStringListReduceMethod;
   startingValue: string): string;
 var
   i: integer;
@@ -81,19 +78,19 @@ begin
   end;
 end;
 
-function TFunctionalStringList.Map(fun: TFunctionalStringListMapMethod):
-TFunctionalStringList;
+function TFunctionalStringList.Map(fun: TStringListMapMethod):
+TStringList;
 var
   i: integer;
 begin
-  Result := TFunctionalStringList.Create;
+  Result := TStringList.Create;
   for i := 0 to Self.Count - 1 do
   begin
     Result.Add(fun(Self[i]));
   end;
 end;
 
-procedure TFunctionalStringList.ForEach(fun: TFunctionalStringListForeachMethod);
+procedure TFunctionalStringList.ForEach(fun: TStringListForeachMethod);
 var
   i: integer;
 begin
@@ -136,18 +133,13 @@ begin
   Result := Self.Count;
 end;
 
-function TFunctionalStringList.Reverse: TFunctionalStringList;
+function TFunctionalStringList.Reverse: TStringList;
 var
   i: integer;
 begin
-  Result := TFunctionalStringList.Create;
+  Result := TStringList.Create;
   for i := Self.Count - 1 downto 0 do
     Result.Add(Self[i]);
-end;
-
-function TFunctionalStringList.ToString: string;
-begin
-  Result := Self.CommaText;
 end;
 
 function TFunctionalStringList.Join(separator: string): string;
@@ -165,19 +157,19 @@ begin
   end;
 end;
 
-function TFunctionalStringList.Concat(other: TFunctionalStringList):
-TFunctionalStringList;
+function TFunctionalStringList.Concat(other: TStringList):
+TStringList;
 begin
-  Result := TFunctionalStringList.Create;
+  Result := TStringList.Create;
   Result.AddStrings(Self);
   Result.AddStrings(other);
 end;
 
-function TFunctionalStringList.Slice(fromIndex: integer): TFunctionalStringList;
+function TFunctionalStringList.Slice(fromIndex: integer): TStringList;
 var
   i: integer;
 begin
-  Result := TFunctionalStringList.Create;
+  Result := TStringList.Create;
   for i := fromIndex to Self.Count - 1 do
   begin
     Result.Add(Self[i]);
@@ -185,11 +177,11 @@ begin
 end;
 
 function TFunctionalStringList.Slice(fromIndex, toIndex: integer
-  ): TFunctionalStringList;
+  ): TStringList;
 var
   i: integer;
 begin
-  Result := TFunctionalStringList.Create;
+  Result := TStringList.Create;
   for i := fromIndex to toIndex do
   begin
     Result.Add(Self[i]);
@@ -197,7 +189,7 @@ begin
 end;
 
 function TFunctionalStringList.Fill(Value: string; start: integer;
-  _end: integer): TFunctionalStringList;
+  _end: integer): TStringList;
 var
   i: integer;
 begin
@@ -208,7 +200,7 @@ begin
     Self[i] := Value;
 end;
 
-function TFunctionalStringList.Some(fun: TFunctionalStringListSomeMethod): boolean;
+function TFunctionalStringList.Some(fun: TStringListSomeMethod): boolean;
 var
   i: integer;
 begin

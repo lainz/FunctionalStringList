@@ -19,11 +19,11 @@ type
   private
     function Filter(const s: String): boolean;
     procedure ForEach(const currentValue: string; const index: integer;
-      const arr: TFunctionalStringList);
+      const arr: TStringList);
     function Map(const s: String): String;
     function Reduce(const s1: String; const s2: String): String;
     function Some(const currentValue: string; const index: integer;
-      const arr: TFunctionalStringList): boolean;
+      const arr: TStringList): boolean;
     procedure printseparator(Memo: TMemo);
   public
 
@@ -40,14 +40,14 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  sl, sl2, slf, slempty: TFunctionalStringList;
+  sl, sl2, slf, slempty: TStringList;
 begin
-  slempty := TFunctionalStringList.Create;
+  slempty := TStringList.Create;
 
-  slf := TFunctionalStringList.Create;
+  slf := TStringList.Create;
   slf.CommaText := '0,1,2,3,4';
 
-  sl2 := TFunctionalStringList.Create;
+  sl2 := TStringList.Create;
   sl2.CommaText := '5,6,7,8,9,0';
 
   // Concat
@@ -94,7 +94,7 @@ begin
   slf.Free;
 
   slf := slempty.Filter(@Filter);
-  Memo2.Lines.Add('Filter in empty list' + LineEnding + slf.ToString);
+  Memo2.Lines.Add('Filter in empty list' + LineEnding + slf.CommaText);
   printseparator(Memo2);
   slf.Free;
 
@@ -140,12 +140,12 @@ begin
 
   // Reverse
   slf := sl.Reverse;
-  Memo1.Lines.Add('Reverse' + LineEnding + slf.ToString);
+  Memo1.Lines.Add('Reverse' + LineEnding + slf.CommaText);
   printseparator(Memo1);
   slf.Free;
 
   slf := slempty.Reverse;
-  Memo2.Lines.Add('Reverse empty list' + LineEnding + slf.ToString);
+  Memo2.Lines.Add('Reverse empty list' + LineEnding + slf.CommaText);
   printseparator(Memo2);
   slf.Free;
 
@@ -180,19 +180,19 @@ begin
 
   // Slice
   slf := sl.Slice(5);
-  Memo1.Lines.Add('Slice' + LineEnding + slf.ToString);
+  Memo1.Lines.Add('Slice' + LineEnding + slf.CommaText);
   printseparator(Memo1);
   slf.Free;
 
   slf := slempty.Slice(5);
-  Memo2.Lines.Add('Slice empty list' + LineEnding + slf.ToString);
+  Memo2.Lines.Add('Slice empty list' + LineEnding + slf.CommaText);
   printseparator(Memo2);
   slf.Free;
 
   // Fill
-  Memo1.Lines.Add('Fill' + LineEnding + sl.Fill('00').ToString);
+  Memo1.Lines.Add('Fill' + LineEnding + sl.Fill('00').CommaText);
   printseparator(Memo1);
-  Memo2.Lines.Add('Fill empty list' + LineEnding + slempty.Fill('00').ToString);
+  Memo2.Lines.Add('Fill empty list' + LineEnding + slempty.Fill('00').CommaText);
   printseparator(Memo2);
 
   // ForEach
@@ -214,7 +214,7 @@ begin
 end;
 
 procedure TForm1.ForEach(const currentValue: string; const index: integer;
-  const arr: TFunctionalStringList);
+  const arr: TStringList);
 begin
   arr[index] := '<p>' + currentValue + '</p>';
 end;
@@ -230,7 +230,7 @@ begin
 end;
 
 function TForm1.Some(const currentValue: string; const index: integer;
-  const arr: TFunctionalStringList): boolean;
+  const arr: TStringList): boolean;
 begin
   Result := StrToInt(currentValue) > 15;
 end;
