@@ -63,16 +63,13 @@ begin
   // ToString
   ShowMessage(sl);
 
-  // Length
-  ShowMessage('Length' + LineEnding + IntToStr(sl.Length));
-
   // Filter
   slf := sl.Filter(@Filter);
   ShowMessage('Filter' + LineEnding + slf.ToString);
   slf.Free;
 
   // Reduce
-  ShowMessage('Reduce' + LineEnding + sl.Reduce(@Reduce));
+  ShowMessage('Reduce' + LineEnding + sl.Reduce(@Reduce, '0'));
 
   // Map
   slf := sl.Map(@Map);
@@ -88,7 +85,9 @@ begin
   ShowMessage(sl);
 
   // Reverse
-  ShowMessage('Reverse' + LineEnding + sl.Reverse.ToString);
+  slf := sl.Reverse;
+  ShowMessage('Reverse' + LineEnding + slf.ToString);
+  slf.Free;
 
   // Shift
   ShowMessage('Shift' + LineEnding + sl.Shift);
