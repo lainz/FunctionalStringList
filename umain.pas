@@ -13,6 +13,8 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    Memo1: TMemo;
+    Memo2: TMemo;
     procedure FormCreate(Sender: TObject);
   private
     function Filter(const s: String): boolean;
@@ -22,7 +24,7 @@ type
     function Reduce(const s1: String; const s2: String): String;
     function Some(const currentValue: string; const index: integer;
       const arr: TFunctionalStringList): boolean;
-
+    procedure printseparator(Memo: TMemo);
   public
 
   end;
@@ -38,8 +40,10 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  sl, sl2, slf: TFunctionalStringList;
+  sl, sl2, slf, slempty: TFunctionalStringList;
 begin
+  slempty := TFunctionalStringList.Create;
+
   slf := TFunctionalStringList.Create;
   slf.CommaText := '0,1,2,3,4';
 
@@ -48,73 +52,160 @@ begin
 
   // Concat
   sl := slf.Concat(sl2);
+  Memo1.Lines.Add('Concat' + LineEnding + sl.ToString);
+  printseparator(Memo1);
   sl2.Free;
   slf.Free;
 
+  // Concat empty list
+  sl2 := slempty.Concat(slempty);
+  Memo2.Lines.Add('Concat empty lists' + LineEnding + slempty.ToString);
+  printseparator(Memo2);
+  sl2.Free;
+
   // IndexOf
-  ShowMessage('IndexOf' + LineEnding + IntToStr(sl.IndexOf('0')));
+  Memo1.Lines.Add('IndexOf' + LineEnding + IntToStr(sl.IndexOf('0')));
+  printseparator(Memo1);
+  Memo2.Lines.Add('IndexOf in empty list' + LineEnding + IntToStr(slempty.IndexOf('0')));
+  printseparator(Memo2);
 
   // LastIndexOf
-  ShowMessage('LastIndexOf' + LineEnding + IntToStr(sl.LastIndexOf('0')));
+  Memo1.Lines.Add('LastIndexOf' + LineEnding + IntToStr(sl.LastIndexOf('0')));
+  printseparator(Memo1);
+  Memo2.Lines.Add('LastIndexOf in empty list' + LineEnding + IntToStr(slempty.LastIndexOf('0')));
+  printseparator(Memo2);
 
   // Some
-  ShowMessage('Some' + LineEnding + BoolToStr(sl.Some(@Some), 'True', 'False'));
+  Memo1.Lines.Add('Some' + LineEnding + BoolToStr(sl.Some(@Some), 'True', 'False'));
+  printseparator(Memo1);
+  Memo2.Lines.Add('Some in empty list' + LineEnding + BoolToStr(slempty.Some(@Some), 'True', 'False'));
+  printseparator(Memo2);
 
   // ToString
-  ShowMessage(sl);
+  Memo1.Lines.Add(sl);
+  printseparator(Memo1);
+  Memo2.Lines.Add(slempty);
+  printseparator(Memo2);
 
   // Filter
   slf := sl.Filter(@Filter);
-  ShowMessage('Filter' + LineEnding + slf.ToString);
+  Memo1.Lines.Add('Filter' + LineEnding + slf.ToString);
+  printseparator(Memo1);
+  slf.Free;
+
+  slf := slempty.Filter(@Filter);
+  Memo2.Lines.Add('Filter in empty list' + LineEnding + slf.ToString);
+  printseparator(Memo2);
   slf.Free;
 
   // Reduce
-  ShowMessage('Reduce' + LineEnding + sl.Reduce(@Reduce, '0'));
+  Memo1.Lines.Add('Reduce' + LineEnding + sl.Reduce(@Reduce, '0'));
+  printseparator(Memo1);
+  Memo2.Lines.Add('Reduce empty list' + LineEnding + slempty.Reduce(@Reduce, '0'));
+  printseparator(Memo2);
 
   // Map
   slf := sl.Map(@Map);
-  ShowMessage('Map' + LineEnding + slf.Text);
+  Memo1.Lines.Add('Map' + LineEnding + slf.Text);
+  printseparator(Memo1);
+  slf.Free;
+
+  slf := slempty.Map(@Map);
+  Memo2.Lines.Add('Map empty list' + LineEnding + slf.Text);
+  printseparator(Memo2);
   slf.Free;
 
   // Pop
-  ShowMessage('Pop' + LineEnding + sl.Pop);
-  ShowMessage(sl);
+  Memo1.Lines.Add('Pop' + LineEnding + sl.Pop);
+  printseparator(Memo1);
+  Memo1.Lines.Add(sl);
+  printseparator(Memo1);
+
+  Memo2.Lines.Add('Pop empty list' + LineEnding + slempty.Pop);
+  printseparator(Memo2);
+  Memo2.Lines.Add(slempty);
+  printseparator(Memo2);
 
   // Push
-  ShowMessage('Push' + LineEnding + IntToStr(sl.Push('9' + LineEnding + '10')));
-  ShowMessage(sl);
+  Memo1.Lines.Add('Push' + LineEnding + IntToStr(sl.Push('9')));
+  printseparator(Memo1);
+  Memo1.Lines.Add(sl);
+  printseparator(Memo1);
+
+  Memo2.Lines.Add('Push empty list' + LineEnding + IntToStr(slempty.Push('9')));
+  printseparator(Memo2);
+  Memo2.Lines.Add(slempty);
+  printseparator(Memo2);
+  slempty.Clear;
 
   // Reverse
   slf := sl.Reverse;
-  ShowMessage('Reverse' + LineEnding + slf.ToString);
+  Memo1.Lines.Add('Reverse' + LineEnding + slf.ToString);
+  printseparator(Memo1);
+  slf.Free;
+
+  slf := slempty.Reverse;
+  Memo2.Lines.Add('Reverse empty list' + LineEnding + slf.ToString);
+  printseparator(Memo2);
   slf.Free;
 
   // Shift
-  ShowMessage('Shift' + LineEnding + sl.Shift);
-  ShowMessage(sl);
+  Memo1.Lines.Add('Shift' + LineEnding + sl.Shift);
+  printseparator(Memo1);
+  Memo1.Lines.Add(sl);
+  printseparator(Memo1);
+
+  Memo2.Lines.Add('Shift empty list' + LineEnding + slempty.Shift);
+  printseparator(Memo2);
+  Memo2.Lines.Add(slempty);
+  printseparator(Memo2);
 
   // Unshift
-  ShowMessage('Unshift' + LineEnding + IntToStr(sl.Unshift('10')));
-  ShowMessage(sl);
+  Memo1.Lines.Add('Unshift' + LineEnding + IntToStr(sl.Unshift('10')));
+  printseparator(Memo1);
+  Memo1.Lines.Add(sl);
+  printseparator(Memo1);
+
+  Memo2.Lines.Add('Unshift empty list' + LineEnding + IntToStr(slempty.Unshift('10')));
+  printseparator(Memo2);
+  Memo2.Lines.Add(slempty);
+  printseparator(Memo2);
+  slempty.Clear;
 
   // Join
-  ShowMessage('Join' + LineEnding + sl.Join(' * '));
+  Memo1.Lines.Add('Join' + LineEnding + sl.Join(' * '));
+  printseparator(Memo1);
+  Memo2.Lines.Add('Join empty list' + LineEnding + slempty.Join(' * '));
+  printseparator(Memo2);
 
   // Slice
   slf := sl.Slice(5);
-  ShowMessage('Slice' + LineEnding + slf.ToString);
+  Memo1.Lines.Add('Slice' + LineEnding + slf.ToString);
+  printseparator(Memo1);
+  slf.Free;
+
+  slf := slempty.Slice(5);
+  Memo2.Lines.Add('Slice empty list' + LineEnding + slf.ToString);
+  printseparator(Memo2);
   slf.Free;
 
   // Fill
-  ShowMessage('Fill' + LineEnding + sl.Fill('00').ToString);
+  Memo1.Lines.Add('Fill' + LineEnding + sl.Fill('00').ToString);
+  printseparator(Memo1);
+  Memo2.Lines.Add('Fill empty list' + LineEnding + slempty.Fill('00').ToString);
+  printseparator(Memo2);
 
   // ForEach
   sl.ForEach(@ForEach);
-  ShowMessage('ForEach' + LineEnding + sl.Text);
+  Memo1.Lines.Add('ForEach' + LineEnding + sl.Text);
+  printseparator(Memo1);
+
+  slempty.ForEach(@ForEach);
+  Memo2.Lines.Add('ForEach empty list' + LineEnding + slempty.Text);
+  printseparator(Memo2);
 
   sl.Free;
-
-  Application.Terminate;
+  slempty.Free;
 end;
 
 function TForm1.Filter(const s: String): boolean;
@@ -142,6 +233,11 @@ function TForm1.Some(const currentValue: string; const index: integer;
   const arr: TFunctionalStringList): boolean;
 begin
   Result := StrToInt(currentValue) > 15;
+end;
+
+procedure TForm1.printseparator(Memo: TMemo);
+begin
+  Memo.Lines.Add('---------------');
 end;
 
 end.
